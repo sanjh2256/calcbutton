@@ -8,91 +8,95 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+{
+  double num1 = 0;
+  double num2 = 0;
+  double result = 0;
 
-  final _textController= TextEditingController();
-  double val1 = 0 ;
-  double val2 = 0 ;
-  double val= 0;
+  void _performOperation(String operation) {
+    setState(() {
+      switch (operation) {
+        case 'Add':
+          result = num1 + num2;
+          break;
+        case 'Subtract':
+          result = num1 - num2;
+          break;
+        case 'Multiply':
+          result = num1 * num2;
+          break;
+        case 'Divide':
+          if (num2 != 0) {
+            result = num1 / num2;
+          } else {
+            result = 0; // Handle division by zero
+          }
+          break;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: EdgeInsets.all(50.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-
-
-              TextField(
-
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'input1 ${val1}',
-                ),
-              ),
-              TextField(
-
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'input2 ${val2}',
-                ),
-              ),
-              TextField(
-                controller: _textController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'output ${val}',
-                ),
-              ),
-
-
-
-
-              Row(
-                children: [
-                  ElevatedButton(onPressed: (){
-                    setState(() {
-                      val=val1+val2;
-                    });
-
-                  }, child: Text("Add")),
-                  SizedBox(width: 80,),
-                  ElevatedButton(onPressed: (){
-                    setState((){
-                      double tt = val1/val2;
-                      val = tt ;
-                    });
-                  }, child: Text("Divide")),
-                ],
-              ),
-              Row(
-                children: [
-                  ElevatedButton(onPressed: (){
-                    setState(() {
-                      val=val1*val2;
-                    });
-
-                  }, child: Text("Multiply")),
-                  SizedBox(width: 60,),
-                  ElevatedButton(onPressed: (){
-                    setState(() {
-                      val=val1-val2;
-                    });
-
-                  }, child: Text("Subtract")),
-
-
-
-                ],
-              )
-            ],
-          ),
+      appBar: AppBar(
+        title: Text('Calculator'),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            TextField(
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: 'Enter number 1'),
+              onChanged: (value) {
+                setState(() {
+                  num1 = double.tryParse(value) ?? 0;
+                });
+              },
+            ),
+            SizedBox(height: 10.0),
+            TextField(
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: 'Enter number 2'),
+              onChanged: (value) {
+                setState(() {
+                  num2 = double.tryParse(value) ?? 0;
+                });
+              },
+            ),
+            SizedBox(height: 20.0),
+            ElevatedButton(
+              onPressed: () => _performOperation('Add'),
+              child: Text('Add'),
+            ),
+            SizedBox(height: 10.0),
+            ElevatedButton(
+              onPressed: () => _performOperation('Subtract'),
+              child: Text('Subtract'),
+            ),
+            SizedBox(height: 10.0),
+            ElevatedButton(
+              onPressed: () => _performOperation('Multiply'),
+              child: Text('Multiply'),
+            ),
+            SizedBox(height: 10.0),
+            ElevatedButton(
+              onPressed: () => _performOperation('Divide'),
+              child: Text('Divide'),
+            ),
+            SizedBox(height: 20.0),
+            Text(
+              'Result: $result',
+              style: TextStyle(fontSize: 20.0),
+            ),
+          ],
         ),
       ),
     );
   }
 }
+
+
